@@ -40,6 +40,32 @@ module "tls_private_key_1" {
   source    = "./modules/tls_private_key"
   algorithm = "RSA"
 }
+// --------------- DB INSTANCE ---------------
+module "db_instance_1" {
+  source    = "./modules/db_instance"
+  allocated_storage    = 10
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t2.micro"
+  name                 = "fdb"
+  username             = "foo"
+  password             = "foobarbaz"
+  parameter_group_name = "default.mysql5.7"
+
+  db_subnet_group_name = module.db_subnet_group_1.db_subnet_group_id
+
+  identifier           = "frolov-tf-db"  
+  skip_final_snapshot  = true
+  tags_name            = "Frolov TF DB"
+}
+// -------------- DB SUBNET GROUP -------------
+module "db_subnet_group_1" {
+  source     = "./modules/db_subnet_group"
+  name       = "main"
+  subnet_ids = [module.subnet_private_a.vpc_subnet_id, module.subnet_private_b.vpc_subnet_id]
+  tags_name  = "Frolov TF DB_SG"
+}
 // ------------------- VPC -------------------
 module "vpc_1" {
   source           = "./modules/vpc"
