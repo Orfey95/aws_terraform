@@ -6,6 +6,10 @@ variable "description" {
   description = "Description of security group"
   type = string
 }
+variable "vpc_id" {
+  description = "VPC of security group"
+  type = string
+}
 // Ingress
 variable "ingress_description" {
   description = "Description of ingress rule for security group"
@@ -49,6 +53,6 @@ variable "egress_cidr_blocks" {
   type = list(string)
 }
 variable "tags_name" {
-  description = "Tags of vm instance"
+  description = "Name tag of security group"
   type = string
 }
