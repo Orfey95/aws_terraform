@@ -66,6 +66,19 @@ module "db_subnet_group_1" {
   subnet_ids = [module.subnet_private_a.vpc_subnet_id, module.subnet_private_b.vpc_subnet_id]
   tags_name  = "Frolov TF DB_SG"
 }
+// ------------------- ELB -------------------
+module "elb_1" {
+  source                     = "./modules/elb"
+  name                       = "frolov-tf-elb"
+  subnets                    = [module.subnet_public_a.vpc_subnet_id, module.subnet_public_b.vpc_subnet_id]
+  listener_instance_port     = 80
+  listener_instance_protocol = "http"
+  listener_lb_port           = 80
+  listener_lb_protocol       = "http"
+  instances                  = [module.instance_1.instance_id]
+  cross_zone_load_balancing  = true
+  tags_name                  = "Frolov TF ELB"
+}
 // ------------------- VPC -------------------
 module "vpc_1" {
   source           = "./modules/vpc"
